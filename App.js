@@ -1,15 +1,10 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-
 import React, { Component } from 'react';
 import { View } from 'react-native';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
 import { Header, Button, Spinner } from './src/components/common';
-import { LoginForm } from './src/components/LoginForm';
+import LibraryList from './src/components/LibraryList';
+import reducers from './src/reducers';
 import {
   API_KEY,
   AUTH_DOMAIN,
@@ -38,12 +33,11 @@ export default class App extends Component<Props> {
       storageBucket: STORAGE_BUCKET,
       messagingSenderId: MESSAGING_SENDER_ID
     };
-    console.log(config);
-    firebase.initializeApp(config);
+    // firebase.initializeApp(config);
 
-    firebase.auth().onAuthStateChanged((user) => {
-      this.setState({ loggedIn: user ? true : false });
-    });
+    // firebase.auth().onAuthStateChanged((user) => {
+    //   this.setState({ loggedIn: user ? true : false });
+    // });
   }
 
   handleLogOut = () => {
@@ -51,23 +45,24 @@ export default class App extends Component<Props> {
   }
 
   renderContent() {
-    switch (this.state.loggedIn) {
-      case true:
-        return <Button onPress={this.handleLogOut}> Log out </Button>
-      case false:
-        return <LoginForm />
-      default:
-        return <Spinner />
-    }
+    // switch (this.state.loggedIn) {
+      // case true:
+        return <LibraryList />
+    //   case false:
+    //     return <LoginForm />
+    //   default:
+    //     return <Spinner />
+    // }
   }
 
   render() {
-    console.log(this.state.loggedIn)
     return (
-      <View style={styles.container}>
-        <Header text={'CinCity'} />
-        {this.renderContent()}
-      </View>
+      <Provider store={createStore(reducers)}>
+        <View style={styles.container}>
+          <Header text={'CinCity'} />
+          {this.renderContent()}
+        </View>
+      </Provider>
     );
   }
 }

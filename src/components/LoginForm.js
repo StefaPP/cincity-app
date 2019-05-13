@@ -15,7 +15,7 @@ class LoginForm extends React.Component {
   handleEmailChange = (email) => {
     this.setState(() => ({
       email
-    }))
+    }));
   }
 
   handlePasswordChange = (password) => {
