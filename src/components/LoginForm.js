@@ -33,7 +33,7 @@ class LoginForm extends React.Component {
         firebase.auth().createUserWithEmailAndPassword(email, password)
         .then(this.onLoginSuccess)  
         .catch(this.onLoginFail)
-      })
+      });
   }
 
   onLoginSuccess = () => {

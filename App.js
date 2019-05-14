@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
-import { Header, Button, Spinner } from './src/components/common';
+import { View } from 'react-native';
+import { createStore, applyMiddleware } from 'redux';
 import LibraryList from './src/components/LibraryList';
 import reducers from './src/reducers';
 import {
@@ -13,17 +12,18 @@ import {
   STORAGE_BUCKET,
   MESSAGING_SENDER_ID,
 } from 'react-native-dotenv'
+import LoginForm from './src/components/LoginForm.1';
 
-import firebase from 'firebase';
-
-type Props = {};
-export default class App extends Component<Props> {
+import firebase, { app } from 'firebase';
+import ReduxThunk from 'redux-thunk';
+import RouterComponent from './Router';
+export default class App extends Component {
 
   state = {
     loggedIn: null,
   }
 
-  componentDidMount() {
+  componentWillMount() {
 
     const config = {
       apiKey: API_KEY,
@@ -33,7 +33,7 @@ export default class App extends Component<Props> {
       storageBucket: STORAGE_BUCKET,
       messagingSenderId: MESSAGING_SENDER_ID
     };
-    // firebase.initializeApp(config);
+    firebase.initializeApp(config);
 
     // firebase.auth().onAuthStateChanged((user) => {
     //   this.setState({ loggedIn: user ? true : false });
@@ -46,8 +46,8 @@ export default class App extends Component<Props> {
 
   renderContent() {
     // switch (this.state.loggedIn) {
-      // case true:
-        return <LibraryList />
+    // case true:
+    return <LibraryList />
     //   case false:
     //     return <LoginForm />
     //   default:
@@ -57,10 +57,9 @@ export default class App extends Component<Props> {
 
   render() {
     return (
-      <Provider store={createStore(reducers)}>
+      <Provider store={createStore(reducers, {}, applyMiddleware(ReduxThunk))}>
         <View style={styles.container}>
-          <Header text={'CinCity'} />
-          {this.renderContent()}
+          <RouterComponent />
         </View>
       </Provider>
     );
