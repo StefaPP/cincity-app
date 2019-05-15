@@ -12,7 +12,7 @@ import {
   STORAGE_BUCKET,
   MESSAGING_SENDER_ID,
 } from 'react-native-dotenv'
-import LoginForm from './src/components/LoginForm.1';
+import LoginForm from './src/components/LoginForm';
 
 import firebase, { app } from 'firebase';
 import ReduxThunk from 'redux-thunk';

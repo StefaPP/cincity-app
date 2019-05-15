@@ -1,10 +1,12 @@
 import { combineReducers } from 'redux';
-import libraryReducer from './libraryReducer';
 import selectionReducer from './selectionReducer';
+import movieReducer from './movieReducer';
 import loginReducer from './loginReducer';
+import moviesReducer from './moviesReducer';
 
 export default combineReducers({
-  libraries: libraryReducer,
   selectedLibraryId: selectionReducer,
   auth: loginReducer,
+  movieForm: movieReducer,
+  movies: moviesReducer,
 });

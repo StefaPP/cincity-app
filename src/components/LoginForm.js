@@ -1,56 +1,41 @@
 import React from 'react';
-import { Text } from 'react-native';
-import { Button, Card, CardSection, Spinner, Input } from './common';
-import firebase from 'firebase';
+import { View, Text } from 'react-native';
+import { Card, CardSection, Input, Button, Spinner } from './common';
+import { connect } from 'react-redux';
+import { emailChanged, passwordChanged, loginUser } from '../actions/loginAction';
 
-class LoginForm extends React.Component {
+class LoginForm extends React.PureComponent {
 
-  state = {
-    email: '',
-    password: '',
-    error: '',
-    loading: false,
+
+
+  handleEmailChange = (text) => {
+    this.props.emailChanged(text);
   }
 
-  handleEmailChange = (email) => {
-    this.setState(() => ({
-      email
-    }));
-  }
-
-  handlePasswordChange = (password) => {
-    this.setState(() => ({
-      password,
-    }))
+  handlePasswordChange = (text) => {
+    this.props.passwordChanged(text);
   }
 
   handleOnPress = () => {
-    const { email, password } = this.state;
-    this.setState({ error: '', loading: true });
-    firebase.auth().signInWithEmailAndPassword(email, password)
-      .then(this.onLoginSuccess) 
-      .catch(() => {
-        firebase.auth().createUserWithEmailAndPassword(email, password)
-        .then(this.onLoginSuccess)  
-        .catch(this.onLoginFail)
-      });
+    const { email, password } = this.props;
+
+    this.props.loginUser({ email, password });
   }
 
-  onLoginSuccess = () => {
-    this.setState({
-      email: '',
-      password: '',
-      loading: false,
-      error: '',
-    })
-  }
-
-  onLoginFail = () => {
-    this.setState({ error: 'Authentication Failed', loading: false });
+  renderError() {
+    if (this.props.error) {
+      return (
+        <View style={{ backgroundColor: 'white' }}>
+          <Text style={styles.errorTextStyle}>
+            {this.props.error}
+          </Text>
+        </View>
+      )
+    }
   }
 
   renderButton() {
-    if (this.state.loading) {
+    if (this.props.loading) {
       return <Spinner size="small" />
     }
     return (
@@ -59,13 +44,14 @@ class LoginForm extends React.Component {
   }
 
   render() {
+    const { email, password } = this.props;
     return (
       <Card>
         <CardSection>
           <Input
             placeholder="user@email.com"
             label="Email"
-            value={this.state.email}
+            value={email || 'stefancina@live.co'}
             onChangeText={this.handleEmailChange}
           />
         </CardSection>
@@ -73,23 +59,20 @@ class LoginForm extends React.Component {
           <Input
             placeholder="password"
             label="Password"
-            value={this.state.password}
+            value={password || 'srbijasrbima'}
             onChangeText={this.handlePasswordChange}
             secureTextEntry
           />
         </CardSection>
-
-        <Text style={styles.errorTextStyle} >
-          {this.state.error}
-        </Text>
-
+        {this.renderError()}
         <CardSection>
           {this.renderButton()}
         </CardSection>
       </Card>
-    );
+
+    )
   }
-}
+};
 
 const styles = {
   errorTextStyle: {
@@ -97,6 +80,13 @@ const styles = {
     alignSelf: 'center',
     color: 'red'
   }
-}
+};
 
-export { LoginForm }
+const mapStateToProps = state => ({
+  email: state.auth.email,
+  password: state.auth.password,
+  error: state.auth.error,
+  loading: state.auth.loading,
+});
+
+export default connect(mapStateToProps, { emailChanged, passwordChanged, loginUser })(LoginForm);
