@@ -2,7 +2,8 @@ import { MOVIES_FETCH_SUCCESS } from '../actions/types';
 
 const INITIAL_STATE = {
   title: '',
-  description: ''
+  description: '',
+  poster: '',
 };
 
 export default (state = INITIAL_STATE, action) => {

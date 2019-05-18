@@ -51,7 +51,7 @@ class LoginForm extends React.PureComponent {
           <Input
             placeholder="user@email.com"
             label="Email"
-            value={email || 'stefancina@live.co'}
+            value={email || 'stefancina@live.com'}
             onChangeText={this.handleEmailChange}
           />
         </CardSection>

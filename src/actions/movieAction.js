@@ -15,20 +15,20 @@ export const movieUpdate = ({ prop, value }) => {
   };
 };
 
-export const movieCreate = ({ title, description }) => dispatch => {
+export const movieCreate = ({ title, description, poster }) => dispatch => {
   const { currentUser } = firebase.auth();
   firebase.database().ref(`/users/${currentUser.uid}/movies`)
-    .push({ title, description })
+    .push({ title, description, poster })
     .then(() => {
       dispatch({ type: MOVIE_CREATE });
       Actions.pop();
     })
 };
 
-export const movieEdit = ({ title, description, uid }) => dispatch => {
+export const movieEdit = ({ title, description, poster, uid }) => dispatch => {
   const { currentUser } = firebase.auth();
   firebase.database().ref(`/users/${currentUser.uid}/movies/${uid}`)
-    .set({ title, description })
+    .set({ title, description, poster })
     .then(() => {
       dispatch({ type: MOVIE_EDIT });
       Actions.pop();

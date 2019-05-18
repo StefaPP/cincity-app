@@ -20,8 +20,9 @@ class MovieEdit extends PureComponent {
   }
 
   handleOnPress = () => {
-    const { title, description } = this.props;
-    this.props.movieEdit({ title, description, uid: this.props.movie.uid });
+    const { title, description, poster } = this.props;
+    console.log(title, description, poster);
+    this.props.movieEdit({ title, description, poster, uid: this.props.movie.uid });
   }
 
   handleAccept = () => {
@@ -61,7 +62,8 @@ class MovieEdit extends PureComponent {
 
 const mapStateToProps = state => ({
   title: state.movieForm.title,
-  description: state.movieForm.description
+  description: state.movieForm.description,
+  poster: state.movieForm.poster,
 })
 
 export default connect(mapStateToProps, { movieEdit, movieUpdate, movieDelete })(MovieEdit);

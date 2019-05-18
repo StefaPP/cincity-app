@@ -7,7 +7,7 @@ import { movieUpdate } from '../actions/movieAction';
 class MovieForm extends React.PureComponent {
 
   render() {
-    const { title, description } = this.props;
+    const { title, description, poster } = this.props;
 
     return (
       <Card>
@@ -33,6 +33,14 @@ class MovieForm extends React.PureComponent {
             onChangeText={value => this.props.movieUpdate({ prop: 'description', value })}
           />
         </CardSection>
+        <CardSection>
+          <Input
+            label="Poster"
+            placeholder="Add poster"
+            value={poster}
+            onChangeText={value => this.props.movieUpdate({ prop: 'poster', value })}
+          />
+        </CardSection>
       </Card>
     )
   }
@@ -40,7 +48,8 @@ class MovieForm extends React.PureComponent {
 
 const mapStateToProps = state => ({
   title: state.movieForm.title,
-  description: state.movieForm.description
+  description: state.movieForm.description,
+  poster: state.movieForm.poster
 })
 
 export default connect(mapStateToProps, { movieUpdate })(MovieForm);

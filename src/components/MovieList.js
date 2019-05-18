@@ -1,48 +1,80 @@
 import React from 'react';
 import map from 'lodash/map';
-import { ListView } from 'react-native';
-import { ListItem } from './ListItem';
+
+import { StyleSheet, ScrollView, View } from 'react-native';
 import { connect } from 'react-redux';
+import { Actions } from 'react-native-router-flux';
+
 import { fetchMovies } from '../actions/movieAction';
+
+import MoviePoster from './MoviePoster';
+import MoviePopup from './MoviePopup';
 
 class MovieList extends React.PureComponent {
 
   state = {
-    dataSource: null,
+    popupIsOpen: false,
   }
 
   componentDidMount() {
     this.props.fetchMovies();
   }
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (nextProps.movies && nextProps.movies !== prevState.dataSource) {
-      const ds = new ListView.DataSource({
-        rowHasChanged: (r1, r2) => r1 !== r2
-      });
-      return {
-        dataSource: ds.cloneWithRows(nextProps.movies),
-      }
-    }
-    return null;
+  openMovie = (movie) => {
+    this.setState({
+      popupIsOpen: true,
+      movie,
+    });
   }
 
-  renderRow(movie) {
-    return <ListItem movie={movie} />
+  closeMovie = () => {
+    this.setState({
+      popupIsOpen: false,
+    });
+  }
+
+  handleOnPress = (movie) => {
+    console.log('opening the movie !', movie);
+    Actions.movieEdit({ movie });
   }
 
   render() {
-    const { dataSource } = this.state;
+    const { movies } = this.props;
 
     return (
-      <ListView
-        enableEmptySections
-        dataSource={dataSource}
-        renderRow={this.renderRow}
-      />
+      <View style={styles.container}>
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
+        >
+          {movies.map((movie, index) =>
+            <MoviePoster
+              movie={movie}
+              onOpen={this.openMovie}
+              key={index}
+            />
+          )}
+        </ScrollView>
+        <MoviePopup
+          movie={this.state.movie}
+          isOpen={this.state.popupIsOpen}
+          onClose={this.closeMovie}
+        />
+      </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    paddingTop: 20,         // start below status bar
+  },
+  scrollContent: {
+    flexDirection: 'row',   // arrange posters in rows
+    flexWrap: 'wrap',       // allow multiple rows
+  },
+});
 
 const mapStateToProps = state => ({
   movies: map(state.movies.list, (val, uid) => ({ ...val, uid })),

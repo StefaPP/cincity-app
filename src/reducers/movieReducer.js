@@ -2,7 +2,8 @@ import { MOVIE_UPDATE, MOVIE_CREATE, MOVIE_EDIT } from '../actions/types';
 
 const INITIAL_STATE = {
   title: '',
-  description: ''
+  description: '',
+  poster: '',
 };
 
 export default (state = INITIAL_STATE, action) => {
