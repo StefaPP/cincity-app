@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'React';
-import { Card, CardSection, Button, Input } from './common';
+import { Card, CardSection, Button } from './common';
 import { connect } from 'react-redux';
-import { movieUpdate, movieCreate } from '../actions/movieAction';
+import { movieCreate } from '../actions/movieAction';
+import MovieForm from './MovieForm';
 
 class MovieCreate extends PureComponent {
 
@@ -12,38 +13,15 @@ class MovieCreate extends PureComponent {
   }
 
   render() {
+
     return (
       <Card>
-        <CardSection>
-          <Input
-            label="Title"
-            placeholder="Enter title"
-            value={this.props.title}
-            onChangeText={value => this.props.movieUpdate({ prop: 'title', value })}
-          />
-        </CardSection>
-
-
-        <CardSection>
-          <Input
-            label="Description"
-            placeholder="Enter description"
-            value={this.props.description}
-            onChangeText={value => this.props.movieUpdate({ prop: 'description', value })}
-          />
-        </CardSection>
-
-
-        <CardSection>
-        </CardSection>
-
-
+        <MovieForm {...this.props} />
         <CardSection>
           <Button onPress={this.handleOnPress}>
             Create
           </Button>
         </CardSection>
-
       </Card>
     );
   }
@@ -54,5 +32,4 @@ const mapStateToProps = state => ({
   description: state.movieForm.description
 })
 
-
-export default connect(mapStateToProps, { movieUpdate, movieCreate })(MovieCreate);
+export default connect(mapStateToProps, { movieCreate })(MovieCreate);

@@ -6,5 +6,6 @@ export const LOGIN_USER = 'loginUser';
 
 export const MOVIE_UPDATE = 'movieUpdate';
 export const MOVIE_CREATE = 'movieCreate';
+export const MOVIE_EDIT = 'movieEdit';
 
 export const MOVIES_FETCH_SUCCESS = 'movieFetch';

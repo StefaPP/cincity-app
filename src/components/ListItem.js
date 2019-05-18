@@ -1,25 +1,16 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { Text, TouchableWithoutFeedback, View, LayoutAnimation } from 'react-native';
+import { Text, View, TouchableWithoutFeedback } from 'react-native';
 import { CardSection } from './common';
-import * as actions from '../actions';
+import { Actions } from 'react-native-router-flux';
 
 class ListItem extends React.PureComponent {
-
+  
   handleOnPress = () => {
-    const { library, selectLibrary } = this.props;
-
-    selectLibrary(library.item.id);
-  };
-
-  renderDescription = () => (
-    <CardSection>
-      <Text style={{ flex: 1 }}>{this.props.library.item.description}</Text>
-    </CardSection>
-  );
+    Actions.movieEdit({ movie: this.props.movie });
+  }
 
   render() {
-    const { library, expanded } = this.props;
+    const { movie } = this.props;
     const { titleStyle } = styles;
 
     return (
@@ -27,10 +18,9 @@ class ListItem extends React.PureComponent {
         <View>
           <CardSection>
             <Text style={titleStyle}>
-              {library.item.title}
+              {movie.title}
             </Text>
           </CardSection>
-          {expanded && this.renderDescription()}
         </View>
       </TouchableWithoutFeedback>
     );
@@ -44,9 +34,4 @@ const styles = {
   }
 };
 
-const mapStateToProps = (state, ownProps) => {
-  const expanded = state.selectedLibraryId === ownProps.library.item.id
-  return { expanded };
-};
-
-export default connect(mapStateToProps, actions)(ListItem);
+export { ListItem };

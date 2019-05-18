@@ -3,6 +3,7 @@ import { Scene, Router, Actions } from 'react-native-router-flux';
 import LoginForm from './src/components/LoginForm';
 import MovieList from './src/components/MovieList';
 import MovieCreate from './src/components/MovieCreate';
+import MovieEdit from './src/components/MovieEdit';
 
 const RouterComponent = () => {
   return (
@@ -21,6 +22,7 @@ const RouterComponent = () => {
           />
           {/* <Scene key="movieDetail" title="Movies" /> */}
           <Scene key="movieCreate" component={MovieCreate} title="Create movie" />
+          <Scene key="movieEdit" component={MovieEdit} title="Edit movie" />
         </Scene>
       </Scene>
     </Router>

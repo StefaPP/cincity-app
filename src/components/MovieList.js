@@ -1,9 +1,9 @@
 import React from 'react';
-import { View, Text, ListView } from 'react-native';
-import { Card, CardSection } from './common';
+import map from 'lodash/map';
+import { ListView } from 'react-native';
+import { ListItem } from './ListItem';
 import { connect } from 'react-redux';
 import { fetchMovies } from '../actions/movieAction';
-import map from 'lodash/map';
 
 class MovieList extends React.PureComponent {
 
@@ -27,21 +27,25 @@ class MovieList extends React.PureComponent {
     return null;
   }
 
+  renderRow(movie) {
+    return <ListItem movie={movie} />
+  }
+
   render() {
-    const { movies } = this.props;
-    console.log(this.state.dataSource);
+    const { dataSource } = this.state;
+
     return (
-      <View>
-        <Text>
-          Movie list
-        </Text>
-      </View>
-    )
+      <ListView
+        enableEmptySections
+        dataSource={dataSource}
+        renderRow={this.renderRow}
+      />
+    );
   }
 }
 
 const mapStateToProps = state => ({
-  movies: map(state.movies.list, (val, uid) => ({ ...val, uid })) ,
-})
+  movies: map(state.movies.list, (val, uid) => ({ ...val, uid })),
+});
 
 export default connect(mapStateToProps, { fetchMovies })(MovieList);

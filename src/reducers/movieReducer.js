@@ -1,4 +1,4 @@
-import { MOVIE_UPDATE, MOVIE_CREATE } from '../actions/types';
+import { MOVIE_UPDATE, MOVIE_CREATE, MOVIE_EDIT } from '../actions/types';
 
 const INITIAL_STATE = {
   title: '',
@@ -10,9 +10,9 @@ export default (state = INITIAL_STATE, action) => {
     case MOVIE_UPDATE: {
       return { ...state, [action.payload.prop]: action.payload.value };
     }
-    case MOVIE_CREATE: {
+    case MOVIE_CREATE:
+    case MOVIE_EDIT:
       return INITIAL_STATE;
-    }
     default:
       return state;
   }
