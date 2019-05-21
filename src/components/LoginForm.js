@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import { Card, CardSection, Input, Button, Spinner } from './common';
 import { connect } from 'react-redux';
-import { emailChanged, passwordChanged, loginUser } from '../actions/loginAction';
+import { emailChanged, passwordChanged, login } from '../actions/loginAction';
 
 class LoginForm extends React.PureComponent {
 
@@ -19,7 +19,7 @@ class LoginForm extends React.PureComponent {
   handleOnPress = () => {
     const { email, password } = this.props;
 
-    this.props.loginUser({ email, password });
+    this.props.login({ email, password });
   }
 
   renderError() {
@@ -89,4 +89,4 @@ const mapStateToProps = state => ({
   loading: state.auth.loading,
 });
 
-export default connect(mapStateToProps, { emailChanged, passwordChanged, loginUser })(LoginForm);
+export default connect(mapStateToProps, { emailChanged, passwordChanged, login })(LoginForm);

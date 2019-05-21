@@ -1,6 +1,7 @@
 import { EMAIL_CHANGED, PASSWORD_CHANGED, LOGIN_USER_SUCCESS, LOGIN_USER_FAIL, LOGIN_USER } from "./types";
 import firebase from 'firebase';
 import { Actions } from 'react-native-router-flux';
+import { CALL_API } from '../middleware/api'
 
 export const emailChanged = (text) => {
   return {
@@ -38,4 +39,16 @@ export const loginUser = ({ email, password }) => dispatch => {
         .then(user => loginUserSuccess(dispatch, user))
         .catch(() => loginUserFail(dispatch))
     })
+};
+
+const loginAPI = () => (dispatch, getState) => dispatch({
+  [CALL_API]: {
+    types: [LOGIN_USER_SUCCESS, LOGIN_USER_FAIL, LOGIN_USER],
+    endpoint: `/login`,
+    method: 'POST',
+  }
+});
+
+export const login = () => (dispatch, getState) => {
+  return dispatch(loginAPI())
 };
