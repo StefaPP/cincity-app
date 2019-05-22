@@ -1,5 +1,4 @@
 import { EMAIL_CHANGED, PASSWORD_CHANGED, LOGIN_USER_SUCCESS, LOGIN_USER_FAIL, LOGIN_USER } from "./types";
-import firebase from 'firebase';
 import { Actions } from 'react-native-router-flux';
 import { CALL_API } from '../middleware/api'
 
@@ -17,37 +16,19 @@ export const passwordChanged = (text) => {
   }
 }
 
-const loginUserSuccess = (dispatch, user) => {
-  dispatch({
-    type: LOGIN_USER_SUCCESS,
-    payload: user
-  });
-
-  Actions.main();
+const loginAPI = () => (dispatch, getState) => {
+  return dispatch({
+    [CALL_API]: {
+      types: [LOGIN_USER, LOGIN_USER_SUCCESS, LOGIN_USER_FAIL],
+      endpoint: `/login`,
+      method: 'POST',
+      body: {
+        email: 'stefancina@live.com',
+        password: 'srbijasrbima',
+      }
+    }
+  }).then(() => Actions.main())
 };
-
-const loginUserFail = (dispatch) => {
-  dispatch({ type: LOGIN_USER_FAIL });
-};
-
-export const loginUser = ({ email, password }) => dispatch => {
-  dispatch({ type: LOGIN_USER });
-  firebase.auth().signInWithEmailAndPassword(email.trim(), password)
-    .then(user => loginUserSuccess(dispatch, user))
-    .catch(() => {
-      firebase.auth().createUserWithEmailAndPassword(email, password)
-        .then(user => loginUserSuccess(dispatch, user))
-        .catch(() => loginUserFail(dispatch))
-    })
-};
-
-const loginAPI = () => (dispatch, getState) => dispatch({
-  [CALL_API]: {
-    types: [LOGIN_USER_SUCCESS, LOGIN_USER_FAIL, LOGIN_USER],
-    endpoint: `/login`,
-    method: 'POST',
-  }
-});
 
 export const login = () => (dispatch, getState) => {
   return dispatch(loginAPI())

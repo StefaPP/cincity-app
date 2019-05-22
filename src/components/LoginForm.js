@@ -6,8 +6,6 @@ import { emailChanged, passwordChanged, login } from '../actions/loginAction';
 
 class LoginForm extends React.PureComponent {
 
-
-
   handleEmailChange = (text) => {
     this.props.emailChanged(text);
   }

@@ -1,20 +1,24 @@
-const API_ROOT = 'https://spp-cinema-api.herokuapp.com/api/v1'
+// import AsyncStorage from '@react-native-community/async-storage';
 
+const API_ROOT = 'http://192.168.0.16:4000/api/v1';
 // Fetches an API response and normalizes the result JSON according to schema.
 // This makes every API response have the same shape, regardless of how nested it was.
-const callApi = async (endpoint) => {
+const callApi = async (endpoint, method, body) => {
+  console.log('callApi');
   const fullUrl = (endpoint.indexOf(API_ROOT) === -1) ? API_ROOT + endpoint : endpoint;
 
-  // const requestOptions = {
-  //   headers: {
-  //     'Authorization': localStorage && localStorage.getItem('token'),
-  //   },
-  // };
+  const requestOptions = {
+    method,
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  };
 
   try {
     const response = await fetch(fullUrl, requestOptions);
     const jsonResponse = await response.json();
-
     return !response.ok ? Promise.reject(jsonResponse) : Object.assign({}, jsonResponse);
   } catch (err) {
     console.log(err);
@@ -32,7 +36,7 @@ export default store => next => action => {
     return next(action);
   }
 
-  let { endpoint } = callAPI;
+  let { endpoint, method, body } = callAPI;
   const { types } = callAPI;
 
   if (typeof endpoint === 'function') {
@@ -58,7 +62,7 @@ export default store => next => action => {
   const [requestType, successType, failureType] = types;
   next(actionWith({ type: requestType }));
 
-  return callApi(endpoint).then(
+  return callApi(endpoint, method, body).then(
     response => next(actionWith({
       response,
       type: successType
